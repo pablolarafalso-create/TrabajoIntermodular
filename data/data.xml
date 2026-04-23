@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<alimentos>
+<alimentos xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:noNamespaceSchemaLocation="data.xsd">
     
   <alimento>
     <id_alimento>1</id_alimento>
