@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alimentos>
+    
+  <alimento>
+    <id_alimento>1</id_alimento>
+    <nombre>Avena</nombre>
+    <kcal>389</kcal><proteinas>16.9</proteinas>
+    <carbohidratos>66.3</carbohidratos>
+    <grasas>6.9</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>2</id_alimento>
+    <nombre>Arroz integral</nombre>
+    <kcal>111</kcal>
+    <proteinas>2.6</proteinas>
+    <carbohidratos>23.0</carbohidratos>
+    <grasas>0.9</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>3</id_alimento>
+    <nombre>Quinoa</nombre>
+    <kcal>120</kcal><proteinas>4.4</proteinas>
+    <carbohidratos>21.3</carbohidratos>
+    <grasas>1.9</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>4</id_alimento>
+    <nombre>Cuscús</nombre>
+    <kcal>112</kcal><proteinas>3.8</proteinas>
+    <carbohidratos>23.2</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>5</id_alimento>
+    <nombre>Pan integral</nombre>
+    <kcal>247</kcal><proteinas>8.5</proteinas>
+    <carbohidratos>41.0</carbohidratos>
+    <grasas>4.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>6</id_alimento>
+    <nombre>Pasta integral</nombre>
+    <kcal>124</kcal><proteinas>5.0</proteinas>
+    <carbohidratos>25.0</carbohidratos>
+    <grasas>1.1</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>7</id_alimento>
+    <nombre>Maíz</nombre>
+    <kcal>96</kcal><proteinas>3.4</proteinas>
+    <carbohidratos>21.0</carbohidratos>
+    <grasas>1.5</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>8</id_alimento>
+    <nombre>Mijo</nombre>
+    <kcal>119</kcal><proteinas>3.5</proteinas>
+    <carbohidratos>23.7</carbohidratos>
+    <grasas>1.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>9</id_alimento>
+    <nombre>Amaranto</nombre>
+    <kcal>102</kcal><proteinas>3.8</proteinas>
+    <carbohidratos>19.0</carbohidratos>
+    <grasas>1.6</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>10</id_alimento>
+    <nombre>Trigo integral</nombre>
+    <kcal>340</kcal><proteinas>13.2</proteinas>
+    <carbohidratos>72.0</carbohidratos>
+    <grasas>2.5</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>11</id_alimento>
+    <nombre>Pechuga de pollo</nombre>
+    <kcal>165</kcal><proteinas>31.0</proteinas>
+    <carbohidratos>0.0</carbohidratos>
+    <grasas>3.6</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>12</id_alimento>
+    <nombre>Pavo</nombre>
+    <kcal>135</kcal><proteinas>29.0</proteinas>
+    <carbohidratos>0.0</carbohidratos>
+    <grasas>1.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>13</id_alimento>
+    <nombre>Carne de res magra</nombre>
+    <kcal>217</kcal><proteinas>26.0</proteinas>
+    <carbohidratos>0.0</carbohidratos>
+    <grasas>12.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>14</id_alimento>
+    <nombre>Cerdo magro</nombre>
+    <kcal>242</kcal><proteinas>27.0</proteinas>
+    <carbohidratos>0.0</carbohidratos>
+    <grasas>14.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>15</id_alimento>
+    <nombre>Salmón</nombre>
+    <kcal>208</kcal><proteinas>20.0</proteinas>
+    <carbohidratos>0.0</carbohidratos>
+    <grasas>13.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>16</id_alimento>
+    <nombre>Atún</nombre>
+    <kcal>132</kcal><proteinas>28.0</proteinas>
+    <carbohidratos>0.0</carbohidratos>
+    <grasas>1.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>17</id_alimento>
+    <nombre>Sardinas</nombre>
+    <kcal>208</kcal><proteinas>25.0</proteinas>
+    <carbohidratos>0.0</carbohidratos>
+    <grasas>11.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>18</id_alimento>
+    <nombre>Huevo</nombre>
+    <kcal>155</kcal><proteinas>13.0</proteinas>
+    <carbohidratos>1.1</carbohidratos>
+    <grasas>11.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>19</id_alimento>
+    <nombre>Clara de huevo</nombre>
+    <kcal>52</kcal><proteinas>11.0</proteinas>
+    <carbohidratos>0.7</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>20</id_alimento>
+    <nombre>Leche</nombre>
+    <kcal>42</kcal><proteinas>3.4</proteinas>
+    <carbohidratos>5.0</carbohidratos>
+    <grasas>1.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>21</id_alimento>
+    <nombre>Lentejas</nombre>
+    <kcal>116</kcal><proteinas>9.0</proteinas>
+    <carbohidratos>20.0</carbohidratos>
+    <grasas>0.4</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>22</id_alimento>
+    <nombre>Garbanzos</nombre>
+    <kcal>164</kcal><proteinas>8.9</proteinas>
+    <carbohidratos>27.0</carbohidratos>
+    <grasas>2.6</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>23</id_alimento>
+    <nombre>Alubias negras</nombre>
+    <kcal>132</kcal><proteinas>8.9</proteinas>
+    <carbohidratos>23.7</carbohidratos>
+    <grasas>0.5</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>24</id_alimento>
+    <nombre>Alubias rojas</nombre>
+    <kcal>127</kcal><proteinas>8.7</proteinas>
+    <carbohidratos>22.8</carbohidratos>
+    <grasas>0.5</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>25</id_alimento>
+    <nombre>Soja</nombre>
+    <kcal>173</kcal><proteinas>16.6</proteinas>
+    <carbohidratos>9.9</carbohidratos>
+    <grasas>9.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>26</id_alimento>
+    <nombre>Tofu</nombre>
+    <kcal>76</kcal><proteinas>8.0</proteinas>
+    <carbohidratos>1.9</carbohidratos>
+    <grasas>4.8</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>27</id_alimento>
+    <nombre>Tempeh</nombre>
+    <kcal>193</kcal><proteinas>20.0</proteinas>
+    <carbohidratos>9.0</carbohidratos>
+    <grasas>11.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>28</id_alimento>
+    <nombre>Edamame</nombre>
+    <kcal>121</kcal><proteinas>11.0</proteinas>
+    <carbohidratos>10.0</carbohidratos>
+    <grasas>5.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>29</id_alimento>
+    <nombre>Habas</nombre>
+    <kcal>88</kcal><proteinas>7.6</proteinas>
+    <carbohidratos>18.7</carbohidratos>
+    <grasas>0.7</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>30</id_alimento>
+    <nombre>Guisantes</nombre>
+    <kcal>81</kcal><proteinas>5.4</proteinas>
+    <carbohidratos>14.0</carbohidratos>
+    <grasas>0.4</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>31</id_alimento>
+    <nombre>Brócoli</nombre>
+    <kcal>55</kcal><proteinas>3.7</proteinas>
+    <carbohidratos>11.0</carbohidratos>
+    <grasas>0.6</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>32</id_alimento>
+    <nombre>Espinaca</nombre>
+    <kcal>23</kcal><proteinas>2.9</proteinas>
+    <carbohidratos>3.6</carbohidratos>
+    <grasas>0.4</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>33</id_alimento>
+    <nombre>Lechuga</nombre>
+    <kcal>15</kcal><proteinas>1.4</proteinas>
+    <carbohidratos>2.9</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>34</id_alimento>
+    <nombre>Tomate</nombre>
+    <kcal>18</kcal><proteinas>0.9</proteinas>
+    <carbohidratos>3.9</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>35</id_alimento>
+    <nombre>Pepino</nombre>
+    <kcal>16</kcal><proteinas>0.7</proteinas>
+    <carbohidratos>3.6</carbohidratos>
+    <grasas>0.1</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>36</id_alimento>
+    <nombre>Zanahoria</nombre>
+    <kcal>41</kcal><proteinas>0.9</proteinas>
+    <carbohidratos>10.0</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>37</id_alimento>
+    <nombre>Pimiento rojo</nombre>
+    <kcal>31</kcal><proteinas>1.0</proteinas>
+    <carbohidratos>6.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>38</id_alimento>
+    <nombre>Pimiento verde</nombre>
+    <kcal>20</kcal><proteinas>0.9</proteinas>
+    <carbohidratos>4.6</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>39</id_alimento>
+    <nombre>Calabacín</nombre>
+    <kcal>17</kcal><proteinas>1.2</proteinas>
+    <carbohidratos>3.1</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>40</id_alimento>
+    <nombre>Berenjena</nombre>
+    <kcal>25</kcal><proteinas>1.0</proteinas>
+    <carbohidratos>6.0</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>41</id_alimento>
+    <nombre>Cebolla</nombre>
+    <kcal>40</kcal><proteinas>1.1</proteinas>
+    <carbohidratos>9.3</carbohidratos>
+    <grasas>0.1</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>42</id_alimento>
+    <nombre>Ajo</nombre>
+    <kcal>149</kcal><proteinas>6.4</proteinas>
+    <carbohidratos>33.1</carbohidratos>
+    <grasas>0.5</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>43</id_alimento>
+    <nombre>Coliflor</nombre>
+    <kcal>25</kcal><proteinas>1.9</proteinas>
+    <carbohidratos>5.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>44</id_alimento>
+    <nombre>Repollo</nombre>
+    <kcal>25</kcal><proteinas>1.3</proteinas>
+    <carbohidratos>6.0</carbohidratos>
+    <grasas>0.1</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>45</id_alimento>
+    <nombre>Judías verdes</nombre>
+    <kcal>31</kcal><proteinas>1.8</proteinas>
+    <carbohidratos>7.0</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>46</id_alimento>
+    <nombre>Espárragos</nombre>
+    <kcal>20</kcal><proteinas>2.2</proteinas>
+    <carbohidratos>3.9</carbohidratos>
+    <grasas>0.1</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>47</id_alimento>
+    <nombre>Champiñones</nombre>
+    <kcal>22</kcal><proteinas>3.1</proteinas>
+    <carbohidratos>3.3</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>48</id_alimento>
+    <nombre>Setas</nombre>
+    <kcal>28</kcal><proteinas>3.6</proteinas>
+    <carbohidratos>4.3</carbohidratos>
+    <grasas>0.5</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>49</id_alimento>
+    <nombre>Remolacha</nombre>
+    <kcal>43</kcal><proteinas>1.6</proteinas>
+    <carbohidratos>10.0</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>50</id_alimento>
+    <nombre>Apio</nombre>
+    <kcal>16</kcal><proteinas>0.7</proteinas>
+    <carbohidratos>3.0</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>51</id_alimento>
+    <nombre>Manzana</nombre>
+    <kcal>52</kcal><proteinas>0.3</proteinas>
+    <carbohidratos>14.0</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>52</id_alimento>
+    <nombre>Plátano</nombre>
+    <kcal>89</kcal><proteinas>1.1</proteinas>
+    <carbohidratos>23.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>53</id_alimento>
+    <nombre>Naranja</nombre>
+    <kcal>47</kcal><proteinas>0.9</proteinas>
+    <carbohidratos>12.0</carbohidratos>
+    <grasas>0.1</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>54</id_alimento>
+    <nombre>Mandarina</nombre>
+    <kcal>53</kcal><proteinas>0.8</proteinas>
+    <carbohidratos>13.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>55</id_alimento>
+    <nombre>Pera</nombre>
+    <kcal>57</kcal><proteinas>0.4</proteinas>
+    <carbohidratos>15.0</carbohidratos>
+    <grasas>0.1</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>56</id_alimento>
+    <nombre>Melocotón</nombre>
+    <kcal>39</kcal><proteinas>0.9</proteinas>
+    <carbohidratos>10.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>57</id_alimento>
+    <nombre>Piña</nombre>
+    <kcal>50</kcal><proteinas>0.5</proteinas>
+    <carbohidratos>13.0</carbohidratos>
+    <grasas>0.1</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>58</id_alimento>
+    <nombre>Mango</nombre>
+    <kcal>60</kcal><proteinas>0.8</proteinas>
+    <carbohidratos>15.0</carbohidratos>
+    <grasas>0.4</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>59</id_alimento>
+    <nombre>Papaya</nombre>
+    <kcal>43</kcal><proteinas>0.5</proteinas>
+    <carbohidratos>11.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>60</id_alimento>
+    <nombre>Sandía</nombre>
+    <kcal>30</kcal><proteinas>0.6</proteinas>
+    <carbohidratos>8.0</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>61</id_alimento>
+    <nombre>Melón</nombre>
+    <kcal>34</kcal><proteinas>0.8</proteinas>
+    <carbohidratos>8.0</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>62</id_alimento>
+    <nombre>Fresas</nombre>
+    <kcal>32</kcal><proteinas>0.7</proteinas>
+    <carbohidratos>7.7</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>63</id_alimento>
+    <nombre>Arándanos</nombre>
+    <kcal>57</kcal><proteinas>0.7</proteinas>
+    <carbohidratos>14.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>64</id_alimento>
+    <nombre>Frambuesas</nombre>
+    <kcal>52</kcal><proteinas>1.2</proteinas>
+    <carbohidratos>12.0</carbohidratos>
+    <grasas>0.7</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>65</id_alimento>
+    <nombre>Uvas</nombre>
+    <kcal>69</kcal><proteinas>0.6</proteinas>
+    <carbohidratos>18.0</carbohidratos>
+    <grasas>0.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>66</id_alimento>
+    <nombre>Kiwi</nombre>
+    <kcal>61</kcal><proteinas>1.1</proteinas>
+    <carbohidratos>15.0</carbohidratos>
+    <grasas>0.5</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>67</id_alimento>
+    <nombre>Granada</nombre>
+    <kcal>83</kcal><proteinas>1.7</proteinas>
+    <carbohidratos>19.0</carbohidratos>
+    <grasas>1.2</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>68</id_alimento>
+    <nombre>Higo</nombre>
+    <kcal>74</kcal><proteinas>0.8</proteinas>
+    <carbohidratos>19.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>69</id_alimento>
+    <nombre>Ciruela</nombre>
+    <kcal>46</kcal><proteinas>0.7</proteinas>
+    <carbohidratos>11.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>70</id_alimento>
+    <nombre>Cereza</nombre>
+    <kcal>50</kcal><proteinas>1.0</proteinas>
+    <carbohidratos>12.0</carbohidratos>
+    <grasas>0.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>71</id_alimento>
+    <nombre>Almendras</nombre>
+    <kcal>579</kcal><proteinas>21.0</proteinas>
+    <carbohidratos>22.0</carbohidratos>
+    <grasas>50.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>72</id_alimento>
+    <nombre>Nueces</nombre>
+    <kcal>654</kcal><proteinas>15.0</proteinas>
+    <carbohidratos>14.0</carbohidratos>
+    <grasas>65.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>73</id_alimento>
+    <nombre>Avellanas</nombre>
+    <kcal>628</kcal><proteinas>15.0</proteinas>
+    <carbohidratos>17.0</carbohidratos>
+    <grasas>61.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>74</id_alimento>
+    <nombre>Pistachos</nombre>
+    <kcal>562</kcal><proteinas>20.0</proteinas>
+    <carbohidratos>28.0</carbohidratos>
+    <grasas>45.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>75</id_alimento>
+    <nombre>Anacardos</nombre>
+    <kcal>553</kcal><proteinas>18.0</proteinas>
+    <carbohidratos>30.0</carbohidratos>
+    <grasas>44.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>76</id_alimento>
+    <nombre>Semillas de chía</nombre>
+    <kcal>486</kcal><proteinas>17.0</proteinas>
+    <carbohidratos>42.0</carbohidratos>
+    <grasas>31.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>77</id_alimento>
+    <nombre>Semillas de lino</nombre>
+    <kcal>534</kcal><proteinas>18.0</proteinas>
+    <carbohidratos>29.0</carbohidratos>
+    <grasas>42.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>78</id_alimento>
+    <nombre>Semillas de girasol</nombre>
+    <kcal>584</kcal><proteinas>21.0</proteinas>
+    <carbohidratos>20.0</carbohidratos>
+    <grasas>51.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>79</id_alimento>
+    <nombre>Semillas de calabaza</nombre>
+    <kcal>559</kcal><proteinas>30.0</proteinas>
+    <carbohidratos>11.0</carbohidratos>
+    <grasas>49.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>80</id_alimento>
+    <nombre>Aguacate</nombre>
+    <kcal>160</kcal><proteinas>2.0</proteinas>
+    <carbohidratos>9.0</carbohidratos>
+    <grasas>15.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>81</id_alimento>
+    <nombre>Yogur natural</nombre>
+    <kcal>59</kcal><proteinas>10.0</proteinas>
+    <carbohidratos>3.6</carbohidratos>
+    <grasas>0.4</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>82</id_alimento>
+    <nombre>Yogur griego</nombre>
+    <kcal>97</kcal><proteinas>9.0</proteinas>
+    <carbohidratos>3.0</carbohidratos>
+    <grasas>5.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>83</id_alimento>
+    <nombre>Queso fresco</nombre>
+    <kcal>98</kcal><proteinas>11.0</proteinas>
+    <carbohidratos>3.0</carbohidratos>
+    <grasas>4.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>84</id_alimento>
+    <nombre>Queso curado</nombre>
+    <kcal>402</kcal><proteinas>25.0</proteinas>
+    <carbohidratos>1.3</carbohidratos>
+    <grasas>33.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>85</id_alimento>
+    <nombre>Requesón</nombre>
+    <kcal>98</kcal><proteinas>11.0</proteinas>
+    <carbohidratos>3.4</carbohidratos>
+    <grasas>4.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>86</id_alimento>
+    <nombre>Kéfir</nombre>
+    <kcal>41</kcal><proteinas>3.3</proteinas>
+    <carbohidratos>4.0</carbohidratos>
+    <grasas>1.0</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>87</id_alimento>
+    <nombre>Leche desnatada</nombre>
+    <kcal>34</kcal><proteinas>3.4</proteinas>
+    <carbohidratos>5.0</carbohidratos>
+    <grasas>0.1</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>88</id_alimento>
+    <nombre>Leche semidesnatada</nombre>
+    <kcal>46</kcal><proteinas>3.3</proteinas>
+    <carbohidratos>5.0</carbohidratos>
+    <grasas>1.6</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>89</id_alimento>
+    <nombre>Leche entera</nombre>
+    <kcal>61</kcal><proteinas>3.2</proteinas>
+    <carbohidratos>5.0</carbohidratos>
+    <grasas>3.3</grasas>
+  </alimento>
+
+  <alimento>
+    <id_alimento>90</id_alimento>
+    <nombre>Cuajada</nombre>
+    <kcal>98</kcal><proteinas>5.5</proteinas>
+    <carbohidratos>4.0</carbohidratos>
+    <grasas>6.0</grasas>
+  </alimento>
+
+</alimentos>
