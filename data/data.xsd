@@ -2,135 +2,31 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="foodTracker">
+  <!-- Root element -->
+  <xs:element name="alimentos">
     <xs:complexType>
       <xs:sequence>
-
-        <xs:element name="usuarios">
+        <xs:element name="alimento" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="usuario" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="id_user" type="xs:int"/>
-                    <xs:element name="nombre" type="xs:string"/>
-                    <xs:element name="apellidos" type="xs:string"/>
-                    <xs:element name="email" type="xs:string"/>
-                    <xs:element name="contraseña" type="xs:string"/>
-                    <xs:element name="fecha_nacimiento" type="xs:date"/>
-                    <xs:element name="altura" type="xs:decimal"/>
-                    <xs:element name="peso" type="xs:decimal"/>
-                    <xs:element name="fechaCreacion" type="xs:dateTime"/>
-                    <xs:element name="racha" type="xs:int"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
+              
+              <xs:element name="id_alimento" type="xs:int"/>
+              
+              <xs:element name="nombre" type="xs:string"/>
+              
+              <xs:element name="kcal" type="xs:int"/>
+              
+              <xs:element name="proteinas" type="xs:decimal"/>
+              
+              <xs:element name="carbohidratos" type="xs:decimal"/>
+              
+              <xs:element name="grasas" type="xs:decimal"/>
+            
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-
-        <xs:element name="objetivos_diarios">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="objetivo_diario" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="id_user" type="xs:int"/>
-                    <xs:element name="kcal" type="xs:int"/>
-                    <xs:element name="proteinas" type="xs:decimal"/>
-                    <xs:element name="carbohidratos" type="xs:decimal"/>
-                    <xs:element name="grasas" type="xs:decimal"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-
-        <xs:element name="registros_diarios">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="registro_diario" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="registro_id" type="xs:int"/>
-                    <xs:element name="hora_registro" type="xs:dateTime"/>
-                    <xs:element name="id_user" type="xs:int"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-
-        <xs:element name="comidas">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="comida" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="id_comida" type="xs:int"/>
-                    <xs:element name="tipo_comida" type="xs:string"/>
-                    <xs:element name="visiblesn" type="xs:string"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-
-        <xs:element name="alimentos">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="alimento" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="id_alimento" type="xs:int"/>
-                    <xs:element name="nombre" type="xs:string"/>
-                    <xs:element name="kcal" type="xs:int"/>
-                    <xs:element name="proteinas" type="xs:decimal"/>
-                    <xs:element name="carbohidratos" type="xs:decimal"/>
-                    <xs:element name="grasas" type="xs:decimal"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-
-        <xs:element name="registro_diario_comidas">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="registro_diario_comida" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="id_comida" type="xs:int"/>
-                    <xs:element name="registro_id" type="xs:int"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-
-        <xs:element name="comida_alimentos">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="comida_alimento" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="id_comida" type="xs:int"/>
-                    <xs:element name="id_alimento" type="xs:int"/>
-                    <xs:element name="cantidad" type="xs:int"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  
+
 </xs:schema>

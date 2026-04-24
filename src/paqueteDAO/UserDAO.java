@@ -43,7 +43,7 @@ public class UserDAO {
         return usuarios;
     }
 
-    // MÃ©todo para registrar un usuario
+    // Metodo para registrar un usuario
     public boolean registrarUsuario(UserVO user) {
         String sqluser = "INSERT INTO usuario (apellidos, contrasena, email, nombre, fecha_nacimiento, altura, peso, fechaCreacion, racha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
