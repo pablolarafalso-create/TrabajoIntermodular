@@ -1,13 +1,36 @@
 package PaqueteAPP;
 
+import PaqueteControl.Conexion;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
+import paqueteDAO.AlimentoDAO;
 import paqueteDAO.ComidaDAO;
+import paqueteDAO.ComidaAlimentoDAO;
+import paqueteDAO.ObjetivoDiarioDAO;
+import paqueteDAO.RegistroDiarioComidaDAO;
+import paqueteDAO.RegistroDiarioDAO;
 import paqueteDAO.UserDAO;
+import paqueteVO.AlimentoVO;
+import paqueteVO.ComidaVO;
+import paqueteVO.Objetivo_diarioVO;
+import paqueteVO.Registro_diarioVO;
+import paqueteVO.UserVO;
 public class AppController {
 
     private final Scanner sc = new Scanner(System.in);
     private final UserDAO userDAO = new UserDAO();
     private final ComidaDAO comidaDAO = new ComidaDAO();
+    private final AlimentoDAO alimentoDAO = new AlimentoDAO();
+    private final ComidaAlimentoDAO comidaAlimentoDAO = new ComidaAlimentoDAO();
+    private final ObjetivoDiarioDAO objetivoDiarioDAO = new ObjetivoDiarioDAO();
+    private final RegistroDiarioDAO registroDiarioDAO = new RegistroDiarioDAO();
+    private final RegistroDiarioComidaDAO registroDiarioComidaDAO = new RegistroDiarioComidaDAO();
     
 
     private boolean esquemaAsegurado = false;
@@ -20,36 +43,37 @@ public class AppController {
         int opcion;
 
         do {
+            asegurarDatosBase();
             mostrarMenu();
-            opcion = sc.nextInt();
+            opcion = leerEntero();
 
             switch (opcion) {
                 case 1:
-                    
+                    crearUsuario();
                     break;
                 case 2:
-                    
+                    verUsuarios();
                     break;
                 case 3:
-                    
+                    registrarDieta();
                     break;
                 case 4:
-                    
+                    registrarComida();
                     break;
                 case 5:
-                    
+                    registrarAlimento();
                     break;
                 case 6:
-                    
+                    verMacros();
                     break;
                 case 7:
-                    
+                    objetivoDiario();
                     break;
                 case 8:
-                    
+                    verRegistro();
                     break;
                 case 9:
-                    
+                    verDietas();
                     break;
                 case 0:
                     System.out.println("Saliendo...");
@@ -59,6 +83,34 @@ public class AppController {
             }
 
         } while (opcion != 0);
+    }
+
+    private void asegurarDatosBase() {
+        if (esquemaAsegurado) {
+            return;
+        }
+
+        try (Connection con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS total FROM comida");
+            ResultSet rs = ps.executeQuery()) {
+
+            int total = 0;
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+
+            if (total == 0) {
+                comidaDAO.insert(new ComidaVO("Desayuno", 'S'));
+                comidaDAO.insert(new ComidaVO("Comida", 'S'));
+                comidaDAO.insert(new ComidaVO("Cena", 'S'));
+                comidaDAO.insert(new ComidaVO("Snack", 'S'));
+            }
+
+            esquemaAsegurado = true;
+
+        } catch (Exception e) {
+            System.out.println("Aviso: no se pudo comprobar/precargar datos base (BD no disponible).");
+        }
     }
 
     private void mostrarMenu() {
@@ -74,5 +126,314 @@ public class AppController {
         System.out.println("9. Ver dietas");
         System.out.println("0. Salir");
         System.out.print("Selecciona una opcion: ");
+    }
+
+    private int leerEntero() {
+        while (true) {
+            String linea = sc.nextLine().trim();
+            try {
+                return Integer.parseInt(linea);
+            } catch (NumberFormatException e) {
+                System.out.print("Entrada no valida. Introduce un numero: ");
+            }
+        }
+    }
+
+    private int leerEnteroConPrompt(String prompt) {
+        System.out.print(prompt);
+        return leerEntero();
+    }
+
+    private double leerDouble(String prompt) {
+        System.out.print(prompt);
+        while (true) {
+            String linea = sc.nextLine().trim();
+            try {
+                return Double.parseDouble(linea);
+            } catch (NumberFormatException e) {
+                System.out.print("Entrada no valida. Introduce un numero: ");
+            }
+        }
+    }
+
+    private String leerTexto(String prompt) {
+        System.out.print(prompt);
+        return sc.nextLine().trim();
+    }
+
+    private LocalDate leerFecha(String prompt) {
+        System.out.print(prompt);
+        while (true) {
+            String linea = sc.nextLine().trim();
+            try {
+                return LocalDate.parse(linea);
+            } catch (DateTimeParseException e) {
+                System.out.print("Formato no valido. Usa AAAA-MM-DD: ");
+            }
+        }
+    }
+
+    private void crearUsuario() {
+        System.out.println("\n--- Crear usuario ---");
+        String nombre = leerTexto("Nombre: ");
+        String apellidos = leerTexto("Apellidos: ");
+        String email = leerTexto("Email: ");
+        String contrasena = leerTexto("Contrasena: ");
+        LocalDate fechaNacimiento = leerFecha("Fecha nacimiento (AAAA-MM-DD): ");
+        double altura = leerDouble("Altura (m): ");
+        double peso = leerDouble("Peso (kg): ");
+
+        UserVO user = new UserVO(
+            apellidos,
+            contrasena,
+            email,
+            0,
+            nombre,
+            fechaNacimiento,
+            altura,
+            peso,
+            LocalDate.now(),
+            0
+        );
+
+        boolean ok = userDAO.registrarUsuario(user);
+        System.out.println(ok ? "Usuario creado correctamente." : "No se pudo crear el usuario.");
+    }
+
+    private void verUsuarios() {
+        System.out.println("\n--- Usuarios ---");
+        try (Connection con = Conexion.getConnection()) {
+            List<UserVO> usuarios = userDAO.obtenerUsuarios(con);
+            if (usuarios.isEmpty()) {
+                System.out.println("No hay usuarios.");
+                return;
+            }
+            for (UserVO u : usuarios) {
+                System.out.println(u);
+            }
+        } catch (Exception e) {
+            System.out.println("No se pudieron cargar los usuarios (BD no disponible).");
+        }
+    }
+
+    private void registrarDieta() {
+        System.out.println("\n--- Registrar dieta (registro diario) ---");
+        int idUser = leerEnteroConPrompt("Id usuario: ");
+
+        int registroId = registroDiarioDAO.crearRegistro(LocalDateTime.now(), idUser);
+        if (registroId <= 0) {
+            System.out.println("No se pudo crear el registro diario.");
+            return;
+        }
+
+        System.out.println("Registro creado con id: " + registroId);
+        System.out.println("Anade comidas al registro (0 para terminar).");
+        listarComidasVisibles();
+
+        while (true) {
+            int comidaId = leerEnteroConPrompt("Id comida: ");
+            if (comidaId == 0) {
+                break;
+            }
+            boolean ok = registroDiarioComidaDAO.anadirComidaARegistro(registroId, comidaId);
+            System.out.println(ok ? "Comida anadida." : "No se pudo anadir la comida.");
+        }
+    }
+
+    private void registrarComida() {
+        System.out.println("\n--- Registrar comida ---");
+        String tipo = leerTexto("Tipo de comida: ");
+        String visibleStr = leerTexto("Visible? (S/N): ");
+        char visible = (visibleStr.isEmpty() ? 'S' : Character.toUpperCase(visibleStr.charAt(0)));
+        if (visible != 'S' && visible != 'N') {
+            visible = 'S';
+        }
+
+        int comidaId = comidaDAO.insertAndReturnId(new ComidaVO(tipo, visible));
+        if (comidaId <= 0) {
+            System.out.println("No se pudo crear la comida.");
+            return;
+        }
+
+        System.out.println("Comida creada con id: " + comidaId);
+        System.out.println("Anade alimentos a la comida (0 para terminar).");
+        listarAlimentos();
+
+        while (true) {
+            int alimentoId = leerEnteroConPrompt("Id alimento: ");
+            if (alimentoId == 0) {
+                break;
+            }
+            int cantidad = leerEnteroConPrompt("Cantidad (unidades): ");
+            comidaAlimentoDAO.addAlimento(comidaId, alimentoId, cantidad);
+            System.out.println("Alimento vinculado.");
+        }
+    }
+
+    private void registrarAlimento() {
+        System.out.println("\n--- Registrar alimento ---");
+        String nombre = leerTexto("Nombre: ");
+        int kcal = leerEnteroConPrompt("Kcal: ");
+        double proteinas = leerDouble("Proteinas: ");
+        double carbohidratos = leerDouble("Carbohidratos: ");
+        double grasas = leerDouble("Grasas: ");
+
+        AlimentoVO alimento = new AlimentoVO(carbohidratos, grasas, 0, kcal, nombre, proteinas);
+        int id = alimentoDAO.insertar(alimento);
+        System.out.println(id > 0 ? ("Alimento creado con id: " + id) : "No se pudo crear el alimento.");
+    }
+
+    private void verMacros() {
+        System.out.println("\n--- Ver macros de una comida ---");
+        listarComidasVisibles();
+        int comidaId = leerEnteroConPrompt("Id comida: ");
+
+        String sql =
+            "SELECT a.nombre, a.kcal, a.proteinas, a.carbohidratos, a.grasas, ca.cantidad " +
+                "FROM comida_alimento ca " +
+                "JOIN alimento a ON a.id_alimento = ca.id_alimento " +
+                "WHERE ca.id_comida = ?";
+
+        double totalKcal = 0;
+        double totalP = 0;
+        double totalC = 0;
+        double totalG = 0;
+
+        try (Connection con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, comidaId);
+            try (ResultSet rs = ps.executeQuery()) {
+                boolean hay = false;
+                while (rs.next()) {
+                    hay = true;
+                    int cantidad = rs.getInt("cantidad");
+                    double kcal = rs.getDouble("kcal") * cantidad;
+                    double p = rs.getDouble("proteinas") * cantidad;
+                    double c = rs.getDouble("carbohidratos") * cantidad;
+                    double g = rs.getDouble("grasas") * cantidad;
+
+                    totalKcal += kcal;
+                    totalP += p;
+                    totalC += c;
+                    totalG += g;
+
+                    System.out.println(
+                        rs.getString("nombre") + " x" + cantidad +
+                            " -> kcal=" + kcal +
+                            ", P=" + p +
+                            ", C=" + c +
+                            ", G=" + g
+                    );
+                }
+
+                if (!hay) {
+                    System.out.println("La comida no tiene alimentos asociados.");
+                    return;
+                }
+            }
+
+            System.out.println("TOTAL -> kcal=" + totalKcal + ", P=" + totalP + ", C=" + totalC + ", G=" + totalG);
+
+        } catch (Exception e) {
+            System.out.println("No se pudieron calcular los macros (BD no disponible).");
+        }
+    }
+
+    private void objetivoDiario() {
+        System.out.println("\n--- Objetivo diario ---");
+        int idUser = leerEnteroConPrompt("Id usuario: ");
+
+        Objetivo_diarioVO existente = objetivoDiarioDAO.obtenerPorIdUsuario(idUser);
+        if (existente != null) {
+            System.out.println("Actual: " + existente);
+        } else {
+            System.out.println("No hay objetivo registrado para este usuario.");
+        }
+
+        String editar = leerTexto("Quieres crear/actualizar objetivo? (S/N): ");
+        if (editar.isEmpty() || Character.toUpperCase(editar.charAt(0)) != 'S') {
+            return;
+        }
+
+        int kcal = leerEnteroConPrompt("Kcal: ");
+        double proteinas = leerDouble("Proteinas: ");
+        double carbohidratos = leerDouble("Carbohidratos: ");
+        double grasas = leerDouble("Grasas: ");
+
+        Objetivo_diarioVO nuevo = new Objetivo_diarioVO(carbohidratos, grasas, idUser, kcal, proteinas);
+        objetivoDiarioDAO.inserta(nuevo);
+        System.out.println("Objetivo guardado.");
+    }
+
+    private void verRegistro() {
+        System.out.println("\n--- Registro ---");
+        int idUser = leerEnteroConPrompt("Id usuario: ");
+        String usarFecha = leerTexto("Filtrar por fecha? (S/N): ");
+
+        List<Registro_diarioVO> registros;
+        if (!usarFecha.isEmpty() && Character.toUpperCase(usarFecha.charAt(0)) == 'S') {
+            LocalDate fecha = leerFecha("Fecha (AAAA-MM-DD): ");
+            registros = registroDiarioDAO.buscarRegistrosPorFecha(idUser, fecha);
+        } else {
+            registros = registroDiarioDAO.obtenerRegistrosDelDiaActual(idUser);
+        }
+
+        if (registros.isEmpty()) {
+            System.out.println("No hay registros para mostrar.");
+            return;
+        }
+
+        for (Registro_diarioVO r : registros) {
+            System.out.println(r);
+            List<ComidaVO> comidas = registroDiarioComidaDAO.listarComidasDeRegistro(r.getRegistro_id());
+            for (ComidaVO c : comidas) {
+                System.out.println("  - " + c);
+            }
+        }
+    }
+
+    private void verDietas() {
+        System.out.println("\n--- Dietas (registros diarios) ---");
+        String usarHoy = leerTexto("Ver solo hoy? (S/N): ");
+        List<Registro_diarioVO> registros =
+            (!usarHoy.isEmpty() && Character.toUpperCase(usarHoy.charAt(0)) == 'S')
+                ? registroDiarioDAO.obtenerRegistrosDelDiaActual()
+                : registroDiarioDAO.obtenerTodosLosRegistros();
+
+        if (registros.isEmpty()) {
+            System.out.println("No hay dietas/registros.");
+            return;
+        }
+
+        for (Registro_diarioVO r : registros) {
+            System.out.println(r);
+            List<ComidaVO> comidas = registroDiarioComidaDAO.listarComidasDeRegistro(r.getRegistro_id());
+            for (ComidaVO c : comidas) {
+                System.out.println("  - " + c);
+            }
+        }
+    }
+
+    private void listarComidasVisibles() {
+        List<ComidaVO> comidas = comidaDAO.listVisibles();
+        if (comidas.isEmpty()) {
+            System.out.println("(No hay comidas visibles)");
+            return;
+        }
+        for (ComidaVO c : comidas) {
+            System.out.println(c);
+        }
+    }
+
+    private void listarAlimentos() {
+        List<AlimentoVO> alimentos = alimentoDAO.obtenerAlimentos();
+        if (alimentos.isEmpty()) {
+            System.out.println("(No hay alimentos)");
+            return;
+        }
+        for (AlimentoVO a : alimentos) {
+            System.out.println(a);
+        }
     }
 }

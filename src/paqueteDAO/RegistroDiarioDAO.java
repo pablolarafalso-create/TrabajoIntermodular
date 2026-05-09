@@ -4,6 +4,7 @@ import PaqueteControl.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,6 +13,9 @@ import java.util.List;
 import paqueteVO.Registro_diarioVO;
 
 public class RegistroDiarioDAO {
+
+    private static final String SQL_INSERT =
+        "INSERT INTO registro_diario (hora_registro, id_user) VALUES (?, ?)";
 
     private static final String SQL_LISTAR_TODOS =
         "SELECT registro_id, hora_registro, id_user FROM registro_diario ORDER BY hora_registro DESC";
@@ -44,6 +48,28 @@ public class RegistroDiarioDAO {
         }
 
         return registros;
+    }
+
+    public int crearRegistro(LocalDateTime horaRegistro, int idUser) {
+        LocalDateTime hora = (horaRegistro != null) ? horaRegistro : LocalDateTime.now();
+
+        try (Connection con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setTimestamp(1, Timestamp.valueOf(hora));
+            ps.setInt(2, idUser);
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 
     public List<Registro_diarioVO> obtenerRegistrosDelDiaActual() {

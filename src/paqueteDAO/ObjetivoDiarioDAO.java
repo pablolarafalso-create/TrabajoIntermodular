@@ -1,5 +1,6 @@
 package paqueteDAO;
 
+import PaqueteControl.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,8 +9,11 @@ import paqueteVO.Objetivo_diarioVO;
 
 public class ObjetivoDiarioDAO {
     private Connection getConnection() throws SQLException {
-        // return Conexion.obtenerConexion();
-        return null; 
+        try {
+            return Conexion.getConnection();
+        } catch (Exception e) {
+            throw new SQLException("No se pudo abrir la conexión", e);
+        }
     }
 
     /**
