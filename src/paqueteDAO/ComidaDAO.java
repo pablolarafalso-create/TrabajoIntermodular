@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,12 +89,39 @@ public class ComidaDAO {
         }
     }
 
+    public int insertarComidaYDevolverId(Connection conn, ComidaVO comida) throws SQLException {
+        String sql = "INSERT INTO comida (tipo_comida, visiblesn) VALUES (?, ?)";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, comida.getTipoComida());
+            ps.setString(2, String.valueOf(comida.getVisiblesn()));
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+
+        return -1;
+    }
+
     //inserta las comidas
     public void insert(ComidaVO comida) {
         try (Connection conn = Conexion.getConnection()) {
             insertarComida(conn, comida);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public int insertAndReturnId(ComidaVO comida) {
+        try (Connection conn = Conexion.getConnection()) {
+            return insertarComidaYDevolverId(conn, comida);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 

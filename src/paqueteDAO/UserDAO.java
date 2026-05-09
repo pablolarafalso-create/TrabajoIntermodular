@@ -14,7 +14,7 @@ public class UserDAO {
 
     public List<UserVO> obtenerUsuarios(Connection con) {
         List<UserVO> usuarios = new ArrayList<>();
-        String sql = "SELECT id_user, nombre, apellidos, email, contraseÃ±a, fecha_nacimiento, altura, peso, fechaCreacion, racha FROM usuario";
+        String sql = "SELECT id_user, nombre, apellidos, email, contrasena, fecha_nacimiento, altura, peso, fechaCreacion, racha FROM usuario";
 
         try (PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery()) {
@@ -23,7 +23,7 @@ public class UserDAO {
                 Timestamp ts = rs.getTimestamp("fechaCreacion");
                 usuarios.add(new UserVO(
                     rs.getString("apellidos"),
-                    rs.getString("contraseÃ±a"),
+                    rs.getString("contrasena"),
                     rs.getString("email"),
                     rs.getInt("id_user"),
                     rs.getString("nombre"),
@@ -83,7 +83,7 @@ public class UserDAO {
                 if (rs.next()) {
                     return new UserVO(
                         rs.getString("apellidos"),
-                        rs.getString("contraseÃ±a"),
+                        rs.getString("contrasena"),
                         rs.getString("email"),
                         rs.getInt("id_user"),
                         rs.getString("nombre"),
