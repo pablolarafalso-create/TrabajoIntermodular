@@ -4,6 +4,7 @@ import PaqueteControl.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -181,6 +182,69 @@ public class AppController {
             peso = peso / 1000.0;
         }
         return Math.round(peso * 100.0) / 100.0;
+    }
+
+    private double redondear(double valor, int decimales) {
+        if (decimales < 0) {
+            return valor;
+        }
+        double factor = Math.pow(10, decimales);
+        return Math.round(valor * factor) / factor;
+    }
+
+    private DecimalSpec obtenerDecimalSpec(Connection con, String tabla, String columna) throws SQLException {
+        int precision = -1;
+        int scale = -1;
+
+        try (ResultSet rs = con.getMetaData().getColumns(con.getCatalog(), null, tabla, null)) {
+            while (rs.next()) {
+                String col = rs.getString("COLUMN_NAME");
+                if (col == null || !col.equalsIgnoreCase(columna)) {
+                    continue;
+                }
+                precision = rs.getInt("COLUMN_SIZE");
+                scale = rs.getInt("DECIMAL_DIGITS");
+                break;
+            }
+        }
+
+        return new DecimalSpec(precision, scale);
+    }
+
+    private double maximoParaDecimal(int precision, int scale) {
+        if (precision <= 0 || scale < 0 || scale > precision) {
+            return Double.POSITIVE_INFINITY;
+        }
+        int enteros = precision - scale;
+        // Max = 10^enteros - 10^-scale (ej. DECIMAL(6,2) => 9999.99)
+        double max = Math.pow(10, enteros) - Math.pow(10, -scale);
+        return max;
+    }
+
+    private double leerDecimalDentroDeRango(String prompt, int precision, int scale) {
+        double max = maximoParaDecimal(precision, scale);
+        while (true) {
+            double valor = leerDouble(prompt);
+            if (Double.isNaN(valor) || Double.isInfinite(valor)) {
+                System.out.println("Valor no valido. Intentalo de nuevo.");
+                continue;
+            }
+            if (!Double.isInfinite(max) && Math.abs(valor) > max) {
+                System.out.println("Valor fuera de rango. Max permitido: " + max + ". Intentalo de nuevo.");
+                continue;
+            }
+            return redondear(valor, scale >= 0 ? scale : 2);
+        }
+    }
+
+    private static final class DecimalSpec {
+        final int precision;
+        final int scale;
+
+        DecimalSpec(int precision, int scale) {
+            this.precision = precision;
+            this.scale = scale;
+        }
     }
 
     private String leerTexto(String prompt) {
@@ -385,9 +449,31 @@ public class AppController {
         }
 
         int kcal = leerEnteroConPrompt("Kcal: ");
-        double proteinas = leerDouble("Proteinas: ");
-        double carbohidratos = leerDouble("Carbohidratos: ");
-        double grasas = leerDouble("Grasas: ");
+
+        // Validar contra el rango real del DECIMAL en MySQL para evitar "Out of range".
+        DecimalSpec specProte = new DecimalSpec(-1, 2);
+        DecimalSpec specCarbs = new DecimalSpec(-1, 2);
+        DecimalSpec specGrasas = new DecimalSpec(-1, 2);
+        try (Connection con = Conexion.getConnection()) {
+            DecimalSpec p = obtenerDecimalSpec(con, "objetivo_diario", "proteinas");
+            DecimalSpec c = obtenerDecimalSpec(con, "objetivo_diario", "carbohidratos");
+            DecimalSpec g = obtenerDecimalSpec(con, "objetivo_diario", "grasas");
+            if (p.precision > 0) {
+                specProte = p;
+            }
+            if (c.precision > 0) {
+                specCarbs = c;
+            }
+            if (g.precision > 0) {
+                specGrasas = g;
+            }
+        } catch (Exception e) {
+            // Si la BD no esta disponible, seguimos sin validacion por esquema.
+        }
+
+        double proteinas = leerDecimalDentroDeRango("Proteinas: ", specProte.precision, specProte.scale);
+        double carbohidratos = leerDecimalDentroDeRango("Carbohidratos: ", specCarbs.precision, specCarbs.scale);
+        double grasas = leerDecimalDentroDeRango("Grasas: ", specGrasas.precision, specGrasas.scale);
 
         Objetivo_diarioVO nuevo = new Objetivo_diarioVO(carbohidratos, grasas, idUser, kcal, proteinas);
         objetivoDiarioDAO.inserta(nuevo);
