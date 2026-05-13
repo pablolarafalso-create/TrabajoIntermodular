@@ -4,14 +4,17 @@ import PaqueteControl.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import paqueteDAO.AlimentoDAO;
-import paqueteDAO.ComidaDAO;
 import paqueteDAO.ComidaAlimentoDAO;
+import paqueteDAO.ComidaDAO;
 import paqueteDAO.ObjetivoDiarioDAO;
 import paqueteDAO.RegistroDiarioComidaDAO;
 import paqueteDAO.RegistroDiarioDAO;
@@ -149,10 +152,98 @@ public class AppController {
         while (true) {
             String linea = sc.nextLine().trim();
             try {
-                return Double.parseDouble(linea);
+                // Acepta coma decimal (p.ej. "1,75")
+                String normalizada = linea.replace(',', '.');
+                return Double.parseDouble(normalizada);
             } catch (NumberFormatException e) {
                 System.out.print("Entrada no valida. Introduce un numero: ");
             }
+        }
+    }
+
+    private double normalizarAlturaEnMetros(double alturaIntroducida) {
+        // Si el usuario introduce altura en mm o cm, conviertelo a metros.
+        double altura = alturaIntroducida;
+        if (altura > 1000) {
+            // mm -> m (ej. 1700 mm -> 1.7 m)
+            altura = altura / 1000.0;
+        } else if (altura > 10) {
+            // cm -> m (ej. 170 cm -> 1.7 m)
+            altura = altura / 100.0;
+        }
+        // Redondeo a 2 decimales para encajar bien en DECIMAL(3,2)
+        return Math.round(altura * 100.0) / 100.0;
+    }
+
+    private double normalizarPesoEnKg(double pesoIntroducido) {
+        // Si el usuario introduce peso en gramos (ej. 70000), conviertelo a kg.
+        double peso = pesoIntroducido;
+        if (peso > 1000) {
+            peso = peso / 1000.0;
+        }
+        return Math.round(peso * 100.0) / 100.0;
+    }
+
+    private double redondear(double valor, int decimales) {
+        if (decimales < 0) {
+            return valor;
+        }
+        double factor = Math.pow(10, decimales);
+        return Math.round(valor * factor) / factor;
+    }
+
+    private DecimalSpec obtenerDecimalSpec(Connection con, String tabla, String columna) throws SQLException {
+        int precision = -1;
+        int scale = -1;
+
+        try (ResultSet rs = con.getMetaData().getColumns(con.getCatalog(), null, tabla, null)) {
+            while (rs.next()) {
+                String col = rs.getString("COLUMN_NAME");
+                if (col == null || !col.equalsIgnoreCase(columna)) {
+                    continue;
+                }
+                precision = rs.getInt("COLUMN_SIZE");
+                scale = rs.getInt("DECIMAL_DIGITS");
+                break;
+            }
+        }
+
+        return new DecimalSpec(precision, scale);
+    }
+
+    private double maximoParaDecimal(int precision, int scale) {
+        if (precision <= 0 || scale < 0 || scale > precision) {
+            return Double.POSITIVE_INFINITY;
+        }
+        int enteros = precision - scale;
+        // Max = 10^enteros - 10^-scale (ej. DECIMAL(6,2) => 9999.99)
+        double max = Math.pow(10, enteros) - Math.pow(10, -scale);
+        return max;
+    }
+
+    private double leerDecimalDentroDeRango(String prompt, int precision, int scale) {
+        double max = maximoParaDecimal(precision, scale);
+        while (true) {
+            double valor = leerDouble(prompt);
+            if (Double.isNaN(valor) || Double.isInfinite(valor)) {
+                System.out.println("Valor no valido. Intentalo de nuevo.");
+                continue;
+            }
+            if (!Double.isInfinite(max) && Math.abs(valor) > max) {
+                System.out.println("Valor fuera de rango. Max permitido: " + max + ". Intentalo de nuevo.");
+                continue;
+            }
+            return redondear(valor, scale >= 0 ? scale : 2);
+        }
+    }
+
+    private static final class DecimalSpec {
+        final int precision;
+        final int scale;
+
+        DecimalSpec(int precision, int scale) {
+            this.precision = precision;
+            this.scale = scale;
         }
     }
 
@@ -180,8 +271,8 @@ public class AppController {
         String email = leerTexto("Email: ");
         String contrasena = leerTexto("Contrasena: ");
         LocalDate fechaNacimiento = leerFecha("Fecha nacimiento (AAAA-MM-DD): ");
-        double altura = leerDouble("Altura (m): ");
-        double peso = leerDouble("Peso (kg): ");
+        double altura = normalizarAlturaEnMetros(leerDouble("Altura (cm): "));
+        double peso = normalizarPesoEnKg(leerDouble("Peso (kg): "));
 
         UserVO user = new UserVO(
             apellidos,
@@ -227,17 +318,18 @@ public class AppController {
         }
 
         System.out.println("Registro creado con id: " + registroId);
-        System.out.println("Anade comidas al registro (0 para terminar).");
-        listarComidasVisibles();
+        System.out.println("Elige una comida por tipo (0 para saltar cada tipo).");
 
-        while (true) {
-            int comidaId = leerEnteroConPrompt("Id comida: ");
-            if (comidaId == 0) {
-                break;
-            }
-            boolean ok = registroDiarioComidaDAO.anadirComidaARegistro(registroId, comidaId);
-            System.out.println(ok ? "Comida anadida." : "No se pudo anadir la comida.");
+        List<ComidaVO> comidasVisibles = comidaDAO.listVisibles();
+        if (comidasVisibles.isEmpty()) {
+            System.out.println("(No hay comidas visibles)");
+            return;
         }
+
+        elegirYAnadirComidaPorTipo(registroId, "Desayuno", comidasVisibles);
+        elegirYAnadirComidaPorTipo(registroId, "Comida", comidasVisibles);
+        elegirYAnadirComidaPorTipo(registroId, "Cena", comidasVisibles);
+        elegirYAnadirComidaPorTipo(registroId, "Snack", comidasVisibles);
     }
 
     private void registrarComida() {
@@ -357,9 +449,31 @@ public class AppController {
         }
 
         int kcal = leerEnteroConPrompt("Kcal: ");
-        double proteinas = leerDouble("Proteinas: ");
-        double carbohidratos = leerDouble("Carbohidratos: ");
-        double grasas = leerDouble("Grasas: ");
+
+        // Validar contra el rango real del DECIMAL en MySQL para evitar "Out of range".
+        DecimalSpec specProte = new DecimalSpec(-1, 2);
+        DecimalSpec specCarbs = new DecimalSpec(-1, 2);
+        DecimalSpec specGrasas = new DecimalSpec(-1, 2);
+        try (Connection con = Conexion.getConnection()) {
+            DecimalSpec p = obtenerDecimalSpec(con, "objetivo_diario", "proteinas");
+            DecimalSpec c = obtenerDecimalSpec(con, "objetivo_diario", "carbohidratos");
+            DecimalSpec g = obtenerDecimalSpec(con, "objetivo_diario", "grasas");
+            if (p.precision > 0) {
+                specProte = p;
+            }
+            if (c.precision > 0) {
+                specCarbs = c;
+            }
+            if (g.precision > 0) {
+                specGrasas = g;
+            }
+        } catch (Exception e) {
+            // Si la BD no esta disponible, seguimos sin validacion por esquema.
+        }
+
+        double proteinas = leerDecimalDentroDeRango("Proteinas: ", specProte.precision, specProte.scale);
+        double carbohidratos = leerDecimalDentroDeRango("Carbohidratos: ", specCarbs.precision, specCarbs.scale);
+        double grasas = leerDecimalDentroDeRango("Grasas: ", specGrasas.precision, specGrasas.scale);
 
         Objetivo_diarioVO nuevo = new Objetivo_diarioVO(carbohidratos, grasas, idUser, kcal, proteinas);
         objetivoDiarioDAO.inserta(nuevo);
@@ -413,6 +527,70 @@ public class AppController {
                 System.out.println("  - " + c);
             }
         }
+    }
+
+    private void elegirYAnadirComidaPorTipo(int registroId, String tipo, List<ComidaVO> comidasVisibles) {
+        List<ComidaVO> opciones = filtrarComidasPorTipo(comidasVisibles, tipo);
+        if (opciones.isEmpty()) {
+            System.out.println("\n(No hay opciones para '" + tipo + "')");
+            return;
+        }
+
+        System.out.println("\nElige un/a " + tipo + " (0 para saltar):");
+        for (ComidaVO c : opciones) {
+            System.out.println(c);
+        }
+
+        while (true) {
+            int comidaId = leerEnteroConPrompt("Id " + tipo + ": ");
+            if (comidaId == 0) {
+                return;
+            }
+            if (!contieneId(opciones, comidaId)) {
+                System.out.println("Id no valido para '" + tipo + "'. Prueba otra vez (0 para saltar).");
+                continue;
+            }
+
+            boolean ok = registroDiarioComidaDAO.anadirComidaARegistro(registroId, comidaId);
+            System.out.println(ok ? (tipo + " anadido/a.") : ("No se pudo anadir '" + tipo + "'."));
+            return;
+        }
+    }
+
+    private boolean contieneId(List<ComidaVO> comidas, int id) {
+        for (ComidaVO c : comidas) {
+            if (c.getId_comida() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<ComidaVO> filtrarComidasPorTipo(List<ComidaVO> comidas, String tipo) {
+        List<ComidaVO> filtradas = new ArrayList<>();
+        String clave = (tipo == null) ? "" : tipo.trim().toLowerCase(Locale.ROOT);
+
+        for (ComidaVO c : comidas) {
+            if (c == null) {
+                continue;
+            }
+            String valor = c.getTipoComida();
+            if (valor == null) {
+                continue;
+            }
+            String normalized = valor.trim().toLowerCase(Locale.ROOT);
+
+            boolean matchExact = normalized.equals(clave);
+            boolean matchPrefijo = normalized.startsWith(clave + " ")
+                || normalized.startsWith(clave + "-")
+                || normalized.startsWith(clave + ":");
+
+            if (matchExact || matchPrefijo) {
+                filtradas.add(c);
+            }
+        }
+
+        return filtradas;
     }
 
     private void listarComidasVisibles() {
