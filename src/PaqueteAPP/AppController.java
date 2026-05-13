@@ -10,8 +10,8 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 import paqueteDAO.AlimentoDAO;
-import paqueteDAO.ComidaDAO;
 import paqueteDAO.ComidaAlimentoDAO;
+import paqueteDAO.ComidaDAO;
 import paqueteDAO.ObjetivoDiarioDAO;
 import paqueteDAO.RegistroDiarioComidaDAO;
 import paqueteDAO.RegistroDiarioDAO;
@@ -149,11 +149,36 @@ public class AppController {
         while (true) {
             String linea = sc.nextLine().trim();
             try {
-                return Double.parseDouble(linea);
+                // Acepta coma decimal (p.ej. "1,75")
+                String normalizada = linea.replace(',', '.');
+                return Double.parseDouble(normalizada);
             } catch (NumberFormatException e) {
                 System.out.print("Entrada no valida. Introduce un numero: ");
             }
         }
+    }
+
+    private double normalizarAlturaEnMetros(double alturaIntroducida) {
+        // Si el usuario introduce altura en mm o cm, conviertelo a metros.
+        double altura = alturaIntroducida;
+        if (altura > 1000) {
+            // mm -> m (ej. 1700 mm -> 1.7 m)
+            altura = altura / 1000.0;
+        } else if (altura > 10) {
+            // cm -> m (ej. 170 cm -> 1.7 m)
+            altura = altura / 100.0;
+        }
+        // Redondeo a 2 decimales para encajar bien en DECIMAL(3,2)
+        return Math.round(altura * 100.0) / 100.0;
+    }
+
+    private double normalizarPesoEnKg(double pesoIntroducido) {
+        // Si el usuario introduce peso en gramos (ej. 70000), conviertelo a kg.
+        double peso = pesoIntroducido;
+        if (peso > 1000) {
+            peso = peso / 1000.0;
+        }
+        return Math.round(peso * 100.0) / 100.0;
     }
 
     private String leerTexto(String prompt) {
@@ -180,8 +205,8 @@ public class AppController {
         String email = leerTexto("Email: ");
         String contrasena = leerTexto("Contrasena: ");
         LocalDate fechaNacimiento = leerFecha("Fecha nacimiento (AAAA-MM-DD): ");
-        double altura = leerDouble("Altura (m): ");
-        double peso = leerDouble("Peso (kg): ");
+        double altura = normalizarAlturaEnMetros(leerDouble("Altura (cm): "));
+        double peso = normalizarPesoEnKg(leerDouble("Peso (kg): "));
 
         UserVO user = new UserVO(
             apellidos,
