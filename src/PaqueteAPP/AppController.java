@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import paqueteDAO.AlimentoDAO;
 import paqueteDAO.ComidaAlimentoDAO;
@@ -252,17 +254,18 @@ public class AppController {
         }
 
         System.out.println("Registro creado con id: " + registroId);
-        System.out.println("Anade comidas al registro (0 para terminar).");
-        listarComidasVisibles();
+        System.out.println("Elige una comida por tipo (0 para saltar cada tipo).");
 
-        while (true) {
-            int comidaId = leerEnteroConPrompt("Id comida: ");
-            if (comidaId == 0) {
-                break;
-            }
-            boolean ok = registroDiarioComidaDAO.anadirComidaARegistro(registroId, comidaId);
-            System.out.println(ok ? "Comida anadida." : "No se pudo anadir la comida.");
+        List<ComidaVO> comidasVisibles = comidaDAO.listVisibles();
+        if (comidasVisibles.isEmpty()) {
+            System.out.println("(No hay comidas visibles)");
+            return;
         }
+
+        elegirYAnadirComidaPorTipo(registroId, "Desayuno", comidasVisibles);
+        elegirYAnadirComidaPorTipo(registroId, "Comida", comidasVisibles);
+        elegirYAnadirComidaPorTipo(registroId, "Cena", comidasVisibles);
+        elegirYAnadirComidaPorTipo(registroId, "Snack", comidasVisibles);
     }
 
     private void registrarComida() {
@@ -438,6 +441,70 @@ public class AppController {
                 System.out.println("  - " + c);
             }
         }
+    }
+
+    private void elegirYAnadirComidaPorTipo(int registroId, String tipo, List<ComidaVO> comidasVisibles) {
+        List<ComidaVO> opciones = filtrarComidasPorTipo(comidasVisibles, tipo);
+        if (opciones.isEmpty()) {
+            System.out.println("\n(No hay opciones para '" + tipo + "')");
+            return;
+        }
+
+        System.out.println("\nElige un/a " + tipo + " (0 para saltar):");
+        for (ComidaVO c : opciones) {
+            System.out.println(c);
+        }
+
+        while (true) {
+            int comidaId = leerEnteroConPrompt("Id " + tipo + ": ");
+            if (comidaId == 0) {
+                return;
+            }
+            if (!contieneId(opciones, comidaId)) {
+                System.out.println("Id no valido para '" + tipo + "'. Prueba otra vez (0 para saltar).");
+                continue;
+            }
+
+            boolean ok = registroDiarioComidaDAO.anadirComidaARegistro(registroId, comidaId);
+            System.out.println(ok ? (tipo + " anadido/a.") : ("No se pudo anadir '" + tipo + "'."));
+            return;
+        }
+    }
+
+    private boolean contieneId(List<ComidaVO> comidas, int id) {
+        for (ComidaVO c : comidas) {
+            if (c.getId_comida() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<ComidaVO> filtrarComidasPorTipo(List<ComidaVO> comidas, String tipo) {
+        List<ComidaVO> filtradas = new ArrayList<>();
+        String clave = (tipo == null) ? "" : tipo.trim().toLowerCase(Locale.ROOT);
+
+        for (ComidaVO c : comidas) {
+            if (c == null) {
+                continue;
+            }
+            String valor = c.getTipoComida();
+            if (valor == null) {
+                continue;
+            }
+            String normalized = valor.trim().toLowerCase(Locale.ROOT);
+
+            boolean matchExact = normalized.equals(clave);
+            boolean matchPrefijo = normalized.startsWith(clave + " ")
+                || normalized.startsWith(clave + "-")
+                || normalized.startsWith(clave + ":");
+
+            if (matchExact || matchPrefijo) {
+                filtradas.add(c);
+            }
+        }
+
+        return filtradas;
     }
 
     private void listarComidasVisibles() {
