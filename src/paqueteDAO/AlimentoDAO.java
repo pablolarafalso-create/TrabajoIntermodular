@@ -4,6 +4,7 @@ import PaqueteControl.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import paqueteVO.AlimentoVO;
@@ -22,12 +23,12 @@ public class AlimentoDAO {
             while (resultado.next()) {
                 // Creamos el objeto VO con los datos obtenidos
                 AlimentoVO alim = new AlimentoVO(
-                    resultado.getDouble("id_alimento"), 
-                    resultado.getDouble("nombre"), 
-                    resultado.getInt("Kcal"),  
-                    resultado.getInt("proteinas"), 
-                    resultado.getString("carbohidratos"), 
-                    resultado.getDouble("grasas") 
+                    resultado.getDouble("carbohidratos"),
+                    resultado.getDouble("grasas"),
+                    resultado.getInt("id_alimento"),
+                    resultado.getInt("kcal"),
+                    resultado.getString("nombre"),
+                    resultado.getDouble("proteinas")
                 );
                 
                 listaAlimentos.add(alim);
@@ -41,20 +42,20 @@ public class AlimentoDAO {
         return listaAlimentos;
     }
     
-    public AlimentoVO encontrarPorId(double id) {
+    public AlimentoVO encontrarPorId(int id) {
         String consulta = "SELECT id_alimento, nombre, kcal, proteinas, carbohidratos, grasas FROM alimento WHERE id_alimento = ?";
         try (Connection con = Conexion.getConnection();
             PreparedStatement ps = con.prepareStatement(consulta)) {
-            ps.setDouble(1, id);
+            ps.setInt(1, id);
             try (ResultSet resultado = ps.executeQuery()) {
                 if (resultado.next()) {
                     return new AlimentoVO(
-                        resultado.getDouble("id_alimento"),
-                        resultado.getDouble("nombre"),
-                        resultado.getInt("Kcal"),
-                        resultado.getInt("proteinas"),
-                        resultado.getString("carbohidratos"),
-                        resultado.getDouble("grasas")
+                        resultado.getDouble("carbohidratos"),
+                        resultado.getDouble("grasas"),
+                        resultado.getInt("id_alimento"),
+                        resultado.getInt("kcal"),
+                        resultado.getString("nombre"),
+                        resultado.getDouble("proteinas")
                     );
                 }
             }
@@ -62,5 +63,31 @@ public class AlimentoDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public int insertar(AlimentoVO alimento) {
+        String sql = "INSERT INTO alimento (nombre, kcal, proteinas, carbohidratos, grasas) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, alimento.getNombre());
+            ps.setInt(2, alimento.getKcal());
+            ps.setDouble(3, alimento.getProteinas());
+            ps.setDouble(4, alimento.getCarbohidratos());
+            ps.setDouble(5, alimento.getGrasas());
+
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 }
